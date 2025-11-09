@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import API from './api';
 import Login from './components/Login';
 import Register from './components/Register';
+import HomeDashboard from './components/HomeDashboard';
 import Dashboard from './components/Dashboard';
 import DecisionTree from './components/DecisionTree';
 import Admin from './components/Admin';
@@ -12,6 +13,7 @@ function App() {
   const [selectedTreeId, setSelectedTreeId] = useState(null);
   const [showAdmin, setShowAdmin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [showTreeSelector, setShowTreeSelector] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -57,6 +59,35 @@ function App() {
     await API.logout();
     setUser(null);
     setSelectedTreeId(null);
+    setShowAdmin(false);
+    setShowTreeSelector(false);
+  };
+
+  const handleNavigate = (destination, treeId = null) => {
+    setShowAdmin(false);
+    setShowTreeSelector(false);
+    setSelectedTreeId(null);
+
+    switch (destination) {
+      case 'home':
+        // Revenir à l'accueil
+        break;
+      case 'trees':
+        setShowTreeSelector(true);
+        break;
+      case 'tree':
+        setSelectedTreeId(treeId);
+        break;
+      case 'admin':
+        setShowAdmin(true);
+        break;
+      case 'upgrade':
+        // TODO: Page upgrade Premium
+        alert('Page de mise à niveau Premium - À venir');
+        break;
+      default:
+        break;
+    }
   };
 
   const handleSelectTree = (treeId) => {
@@ -97,7 +128,7 @@ function App() {
     <div className="app">
       <header className="app-header">
         <div className="header-content">
-          <div className="logo-section">
+          <div className="logo-section" onClick={() => handleNavigate('home')} style={{ cursor: 'pointer' }}>
             <span className="logo-icon">🦴</span>
             <h1>OsteoUpgrade</h1>
           </div>
@@ -107,7 +138,7 @@ function App() {
               <span className="user-status">{user.status}</span>
             </div>
             {user.status === 'admin' && (
-              <button className="btn-admin" onClick={() => setShowAdmin(true)}>
+              <button className="btn-admin" onClick={() => handleNavigate('admin')}>
                 🔧 Admin
               </button>
             )}
@@ -120,22 +151,21 @@ function App() {
 
       <main className="app-main">
         {showAdmin ? (
-          <Admin onBack={() => {
-            setShowAdmin(false);
-            setSelectedTreeId(null);
-          }} />
+          <Admin onBack={() => handleNavigate('home')} />
         ) : selectedTreeId ? (
           <DecisionTree
             treeId={selectedTreeId}
-            onBack={() => setSelectedTreeId(null)}
+            onBack={() => handleNavigate('home')}
           />
-        ) : (
+        ) : showTreeSelector ? (
           <Dashboard
             user={user}
-            onSelectTree={(treeId) => {
-              setSelectedTreeId(treeId);
-              setShowAdmin(false);
-            }}
+            onSelectTree={(treeId) => handleNavigate('tree', treeId)}
+          />
+        ) : (
+          <HomeDashboard
+            user={user}
+            onNavigate={handleNavigate}
           />
         )}
       </main>

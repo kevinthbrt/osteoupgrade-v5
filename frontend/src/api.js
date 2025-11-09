@@ -116,6 +116,10 @@ class API {
     });
   }
 
+  static async getDiagnostics() {
+    return await this.request('/api/diagnostics');
+  }
+
   static downloadPdf(id) {
     window.open(`/api/diagnostics/${id}/pdf`, '_blank');
   }
