@@ -3,6 +3,7 @@ import API from '../api';
 import TreeManager from './admin/TreeManager';
 import TestManager from './admin/TestManager';
 import UserManager from './admin/UserManager';
+import SettingsManager from './admin/SettingsManager';
 import './Admin.css';
 
 function Admin({ onBack }) {
@@ -34,12 +35,19 @@ function Admin({ onBack }) {
         >
           👥 Utilisateurs
         </button>
+        <button 
+          className={`tab ${activeTab === 'settings' ? 'active' : ''}`}
+          onClick={() => setActiveTab('settings')}
+        >
+          ⚙️ Paramètres
+        </button>
       </div>
 
       <div className="admin-content">
         {activeTab === 'trees' && <TreeManager />}
         {activeTab === 'tests' && <TestManager />}
         {activeTab === 'users' && <UserManager />}
+        {activeTab === 'settings' && <SettingsManager />}
       </div>
     </div>
   );

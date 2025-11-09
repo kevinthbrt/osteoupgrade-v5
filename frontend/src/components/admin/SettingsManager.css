@@ -1,0 +1,144 @@
+.settings-manager h3 {
+  color: #2C3E50;
+  margin-bottom: 30px;
+}
+
+.setting-section {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  border: 2px solid #E8EDF2;
+}
+
+.setting-section h4 {
+  color: #4A90E2;
+  margin-bottom: 10px;
+}
+
+.section-description {
+  color: #7B8794;
+  margin-bottom: 20px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.setting-row label {
+  font-weight: 600;
+  color: #2C3E50;
+  min-width: 150px;
+}
+
+.tree-select {
+  flex: 1;
+  padding: 10px 15px;
+  border: 2px solid #E8EDF2;
+  border-radius: 8px;
+  font-size: 1em;
+  max-width: 300px;
+}
+
+.price-input {
+  width: 120px;
+  padding: 10px 15px;
+  border: 2px solid #E8EDF2;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+.tree-select:focus,
+.price-input:focus {
+  outline: none;
+  border-color: #4A90E2;
+}
+
+.btn-save {
+  padding: 10px 20px;
+  background: #27AE60;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-save:hover {
+  background: #1E8449;
+}
+
+.setting-info {
+  color: #7B8794;
+  font-size: 0.9em;
+  margin-top: 10px;
+  padding-left: 165px;
+}
+
+.summary-section {
+  background: #F8F9FA;
+  padding: 25px;
+  border-radius: 10px;
+  border-left: 4px solid #4A90E2;
+}
+
+.summary-section h4 {
+  color: #2C3E50;
+  margin-bottom: 20px;
+}
+
+.access-table {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.access-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+}
+
+.access-status {
+  min-width: 100px;
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-freemium {
+  background: #95A5A6;
+  color: white;
+}
+
+.badge-premium {
+  background: #F39C12;
+  color: white;
+}
+
+.badge-admin {
+  background: #E74C3C;
+  color: white;
+}
+
+.access-details {
+  flex: 1;
+  color: #2C3E50;
+  line-height: 1.6;
+}
+
+.access-details strong {
+  color: #4A90E2;
+}

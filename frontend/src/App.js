@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import API from './api';
 import Login from './components/Login';
+import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import DecisionTree from './components/DecisionTree';
 import Admin from './components/Admin';
@@ -10,6 +11,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [selectedTreeId, setSelectedTreeId] = useState(null);
   const [showAdmin, setShowAdmin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,6 +42,17 @@ function App() {
     }
   };
 
+  const handleRegister = async (email, password, name) => {
+    try {
+      await API.register(email, password, name);
+      // Connexion automatique après inscription
+      await handleLogin(email, password);
+    } catch (error) {
+      console.error('❌ Erreur inscription:', error);
+      throw error;
+    }
+  };
+
   const handleLogout = async () => {
     await API.logout();
     setUser(null);
@@ -64,7 +77,20 @@ function App() {
   }
 
   if (!user) {
-    return <Login onLogin={handleLogin} />;
+    if (showRegister) {
+      return (
+        <Register
+          onRegister={handleRegister}
+          onBackToLogin={() => setShowRegister(false)}
+        />
+      );
+    }
+    return (
+      <Login
+        onLogin={handleLogin}
+        onRegister={() => setShowRegister(true)}
+      />
+    );
   }
 
   return (

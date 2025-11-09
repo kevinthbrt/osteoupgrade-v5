@@ -34,6 +34,13 @@ class API {
     });
   }
 
+  static async register(email, password, name) {
+    return await this.request('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ email, password, name })
+    });
+  }
+
   static async logout() {
     return await this.request('/api/auth/logout', { method: 'POST' });
   }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Login.css';
 
-function Login({ onLogin }) {
+function Login({ onLogin, onRegister }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -59,6 +59,13 @@ function Login({ onLogin }) {
             {loading ? 'Connexion...' : 'Se connecter'}
           </button>
         </form>
+
+        <div className="register-link">
+          <p>Pas encore de compte ?</p>
+          <button className="btn-link" onClick={onRegister}>
+            Créer un compte gratuitement
+          </button>
+        </div>
       </div>
     </div>
   );

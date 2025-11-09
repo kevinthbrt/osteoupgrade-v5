@@ -3,6 +3,59 @@
   margin-bottom: 30px;
 }
 
+.premium-settings {
+  background: #E8F4FD;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  border: 2px solid #4A90E2;
+}
+
+.premium-settings h4 {
+  color: #4A90E2;
+  margin-bottom: 15px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.setting-row label {
+  font-weight: 600;
+  color: #2C3E50;
+}
+
+.setting-row input {
+  padding: 8px 12px;
+  border: 2px solid #E8EDF2;
+  border-radius: 6px;
+  font-size: 1em;
+  width: 120px;
+}
+
+.btn-save {
+  padding: 8px 16px;
+  background: #27AE60;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-save:hover {
+  background: #1E8449;
+}
+
+.setting-info {
+  color: #7B8794;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
 .users-table {
   width: 100%;
   border-collapse: collapse;
@@ -35,6 +88,7 @@
   font-size: 0.85em;
   font-weight: 600;
   text-transform: uppercase;
+  display: inline-block;
 }
 
 .badge-admin {
@@ -50,6 +104,14 @@
 .badge-freemium {
   background: #95A5A6;
   color: white;
+}
+
+.status-select {
+  padding: 5px 10px;
+  border: 2px solid #4A90E2;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9em;
 }
 
 .btn-toggle {
@@ -73,4 +135,46 @@
 
 .btn-toggle:hover {
   opacity: 0.8;
+}
+
+.btn-change-status {
+  padding: 6px 12px;
+  background: #4A90E2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.btn-change-status:hover {
+  background: #2C5F8D;
+}
+
+.status-legend {
+  margin-top: 30px;
+  padding: 20px;
+  background: #F8F9FA;
+  border-radius: 10px;
+  border-left: 4px solid #4A90E2;
+}
+
+.status-legend h4 {
+  color: #2C3E50;
+  margin-bottom: 15px;
+}
+
+.status-legend ul {
+  list-style: none;
+  padding: 0;
+}
+
+.status-legend li {
+  padding: 8px 0;
+  color: #2C3E50;
+  line-height: 1.6;
+}
+
+.status-legend strong {
+  color: #4A90E2;
 }

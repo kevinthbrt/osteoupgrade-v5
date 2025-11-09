@@ -1,4 +1,4 @@
-.login-container {
+.register-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -6,13 +6,13 @@
   background: linear-gradient(135deg, #E8EDF2 0%, #FFFFFF 100%);
 }
 
-.login-box {
+.register-box {
   background: white;
   padding: 40px;
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
 }
 
 .logo {
@@ -21,7 +21,7 @@
   margin-bottom: 20px;
 }
 
-.login-box h1 {
+.register-box h1 {
   text-align: center;
   color: #4A90E2;
   margin-bottom: 10px;
@@ -96,12 +96,12 @@
   cursor: not-allowed;
 }
 
-.register-link {
+.register-footer {
   margin-top: 20px;
   text-align: center;
 }
 
-.register-link p {
+.register-footer p {
   color: #7B8794;
   margin-bottom: 10px;
 }
@@ -120,12 +120,19 @@
   color: #2C5F8D;
 }
 
-.demo-accounts {
+.free-info {
   margin-top: 20px;
   padding: 15px;
-  background: #F8F9FA;
+  background: #E8F4FD;
   border-radius: 8px;
   text-align: center;
-  font-size: 0.9em;
-  color: #7B8794;
+}
+
+.free-info p {
+  margin: 5px 0;
+  color: #2C3E50;
+}
+
+.free-info strong {
+  color: #4A90E2;
 }
