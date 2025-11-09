@@ -294,6 +294,8 @@ function TestNodeEditor({ node, onUpdate, onAddAnswer, onUpdateAnswer, onDeleteA
   const [availableTests, setAvailableTests] = useState([]);
   const [selectedTests, setSelectedTests] = useState(node.tests || []);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedRegion, setSelectedRegion] = useState('all');
 
   useEffect(() => {
     loadTests();
@@ -334,6 +336,17 @@ function TestNodeEditor({ node, onUpdate, onAddAnswer, onUpdateAnswer, onDeleteA
     return selectedTests.some(t => t.id === testId);
   };
 
+  // Filtrer les tests
+  const regions = [...new Set(availableTests.map(t => t.region))].sort();
+  
+  const filteredTests = availableTests.filter(test => {
+    const matchRegion = selectedRegion === 'all' || test.region === selectedRegion;
+    const matchSearch = searchTerm === '' || 
+      test.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      test.description.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchRegion && matchSearch;
+  });
+
   return (
     <div className="node-form">
       <div className="form-group">
@@ -352,22 +365,59 @@ function TestNodeEditor({ node, onUpdate, onAddAnswer, onUpdateAnswer, onDeleteA
         {loading ? (
           <p>Chargement des tests...</p>
         ) : (
-          <div className="tests-selector">
-            {availableTests.map(test => (
-              <div key={test.id} className="test-option">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={isTestSelected(test.id)}
-                    onChange={() => toggleTest(test)}
-                  />
-                  <span className="test-name">{test.name}</span>
-                  <span className="test-region">({test.region})</span>
-                </label>
-                <p className="test-description">{test.description}</p>
-              </div>
-            ))}
-          </div>
+          <>
+            {/* Barre de recherche */}
+            <div className="test-search">
+              <input
+                type="text"
+                placeholder="🔍 Rechercher un test..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+            </div>
+
+            {/* Filtres par région */}
+            <div className="test-region-filters">
+              <button
+                className={`region-filter-btn ${selectedRegion === 'all' ? 'active' : ''}`}
+                onClick={() => setSelectedRegion('all')}
+              >
+                Toutes
+              </button>
+              {regions.map(region => (
+                <button
+                  key={region}
+                  className={`region-filter-btn ${selectedRegion === region ? 'active' : ''}`}
+                  onClick={() => setSelectedRegion(region)}
+                >
+                  {region}
+                </button>
+              ))}
+            </div>
+
+            {/* Liste des tests */}
+            <div className="tests-selector">
+              {filteredTests.length === 0 ? (
+                <p className="no-tests">Aucun test trouvé</p>
+              ) : (
+                filteredTests.map(test => (
+                  <div key={test.id} className="test-option">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={isTestSelected(test.id)}
+                        onChange={() => toggleTest(test)}
+                      />
+                      <span className="test-name">{test.name}</span>
+                      <span className="test-region">({test.region})</span>
+                    </label>
+                    <p className="test-description">{test.description}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </>
         )}
       </div>
 

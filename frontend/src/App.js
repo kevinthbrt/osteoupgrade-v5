@@ -80,7 +80,7 @@ function App() {
               <span className="user-name">{user.name}</span>
               <span className="user-status">{user.status}</span>
             </div>
-            {user.role === 'admin' && (
+            {user.status === 'admin' && (
               <button className="btn-admin" onClick={() => setShowAdmin(true)}>
                 🔧 Admin
               </button>

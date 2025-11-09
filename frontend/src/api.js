@@ -81,6 +81,26 @@ class API {
     return await this.request(`/api/tests/${id}`);
   }
 
+  static async createTest(testData) {
+    return await this.request('/api/tests', {
+      method: 'POST',
+      body: JSON.stringify(testData)
+    });
+  }
+
+  static async updateTest(id, testData) {
+    return await this.request(`/api/tests/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(testData)
+    });
+  }
+
+  static async deleteTest(id) {
+    return await this.request(`/api/tests/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
   // Diagnostics
   static async saveDiagnostic(data) {
     return await this.request('/api/diagnostics', {

@@ -253,6 +253,59 @@
   background: white;
 }
 
+.test-search {
+  margin-bottom: 15px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #E8EDF2;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4A90E2;
+}
+
+.test-region-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.region-filter-btn {
+  padding: 6px 12px;
+  background: white;
+  border: 2px solid #E8EDF2;
+  border-radius: 6px;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.region-filter-btn:hover {
+  border-color: #4A90E2;
+  color: #4A90E2;
+}
+
+.region-filter-btn.active {
+  background: #4A90E2;
+  color: white;
+  border-color: #4A90E2;
+}
+
+.no-tests {
+  text-align: center;
+  color: #7B8794;
+  padding: 20px;
+}
+
 .test-option {
   padding: 15px;
   margin-bottom: 10px;

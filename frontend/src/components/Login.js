@@ -59,11 +59,6 @@ function Login({ onLogin }) {
             {loading ? 'Connexion...' : 'Se connecter'}
           </button>
         </form>
-
-        <p className="demo-accounts">
-          <strong>Compte démo :</strong><br />
-          kevin.thubert@gmail.com / osteoupgrade97
-        </p>
       </div>
     </div>
   );
