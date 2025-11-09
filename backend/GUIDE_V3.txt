@@ -1,0 +1,380 @@
+═══════════════════════════════════════════════════════════════════════════════
+              🦴 OSTEOUPGRADE VERSION 3.0 - GUIDE D'INSTALLATION
+                    Version Production avec Base de Données
+═══════════════════════════════════════════════════════════════════════════════
+
+🎉 NOUVEAUTÉS VERSION 3.0
+──────────────────────────────────────────────────────────────────────────────
+
+✨ BASE DE DONNÉES SQLite
+   • Stockage persistant de toutes les données
+   • Sauvegarde automatique
+   • Performances optimisées
+
+🔐 AUTHENTIFICATION SÉCURISÉE
+   • Passwords hashés avec bcrypt
+   • Sessions sécurisées
+   • Protection CSRF et XSS
+
+📊 TABLEAU DE BORD ADMIN
+   • Statistiques en temps réel
+   • Graphiques d'utilisation
+   • Monitoring des diagnostics
+
+📄 EXPORT PDF
+   • Génération automatique de rapports
+   • Design professionnel
+   • Téléchargement instantané
+
+👤 COMPTE ADMIN PRINCIPAL
+   Email    : kevin.thubert@gmail.com
+   Password : osteoupgrade97
+   Nom      : Kevin Thubert
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                        INSTALLATION - ÉTAPE PAR ÉTAPE
+═══════════════════════════════════════════════════════════════════════════════
+
+PRÉREQUIS
+──────────────────────────────────────────────────────────────────────────────
+• Node.js version 14+ installé
+  Télécharger : https://nodejs.org
+
+
+ÉTAPE 1 : EXTRAIRE LES FICHIERS
+──────────────────────────────────────────────────────────────────────────────
+1. Extrayez le fichier osteoupgrade-v3.zip dans un dossier
+2. Ouvrez un terminal dans ce dossier
+
+
+ÉTAPE 2 : INSTALLER LES DÉPENDANCES
+──────────────────────────────────────────────────────────────────────────────
+Dans le terminal, tapez :
+
+   npm install
+
+⏳ Attendez que l'installation se termine (1-2 minutes)
+
+
+ÉTAPE 3 : INITIALISER LA BASE DE DONNÉES
+──────────────────────────────────────────────────────────────────────────────
+Dans le terminal, tapez :
+
+   npm run init-db
+
+✅ Cela va créer :
+   • La base de données SQLite
+   • Votre compte admin
+   • Les données de démonstration
+   • Les arbres et tests par défaut
+
+
+ÉTAPE 4 : DÉMARRER LE SERVEUR
+──────────────────────────────────────────────────────────────────────────────
+Dans le terminal, tapez :
+
+   npm start
+
+Vous devriez voir :
+
+   🦴 OsteoUpgrade v3.0 démarré sur le port 3000
+   📱 Accès : http://localhost:3000
+   
+   👤 Admin : kevin.thubert@gmail.com
+   🔑 Password : osteoupgrade97
+
+
+ÉTAPE 5 : OUVRIR L'APPLICATION
+──────────────────────────────────────────────────────────────────────────────
+1. Ouvrez votre navigateur
+2. Allez sur : http://localhost:3000
+3. Connectez-vous avec vos identifiants admin
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                            FONCTIONNALITÉS
+═══════════════════════════════════════════════════════════════════════════════
+
+📊 TABLEAU DE BORD (Admin uniquement)
+──────────────────────────────────────────────────────────────────────────────
+Accessible via l'onglet "Dashboard"
+
+STATISTIQUES AFFICHÉES :
+• Nombre total d'utilisateurs
+• Nombre de diagnostics réalisés
+• Nombre d'arbres décisionnels
+• Nombre de tests orthopédiques
+• Répartition par type d'utilisateur
+• Diagnostics par arbre
+• Évolution sur 30 jours
+• Nouveaux utilisateurs
+
+
+📄 EXPORT PDF DES DIAGNOSTICS
+──────────────────────────────────────────────────────────────────────────────
+Chaque fois qu'un diagnostic est complété :
+
+1. Le résultat s'affiche à l'écran
+2. Un bouton "📄 Télécharger le PDF" apparaît
+3. Cliquez pour générer le rapport PDF professionnel
+
+LE PDF CONTIENT :
+• En-tête OsteoUpgrade
+• Informations du praticien
+• Date et heure du diagnostic
+• Zone examinée
+• Résultat complet avec sévérité
+• Liste des recommandations
+• Pied de page légal
+
+
+👥 CRÉATION DE COMPTES
+──────────────────────────────────────────────────────────────────────────────
+
+OPTION 1 - Auto-inscription (Utilisateurs)
+   • Page de connexion > "Créer un compte"
+   • Saisir email, nom, mot de passe
+   • Compte Freemium créé automatiquement
+
+OPTION 2 - Création par Admin
+   • Administration > Gestion des Utilisateurs
+   • "+ Ajouter un utilisateur"
+   • Choisir le statut : Admin / Premium / Freemium
+
+
+🔒 SÉCURITÉ
+──────────────────────────────────────────────────────────────────────────────
+✅ Mots de passe hashés avec bcrypt
+✅ Sessions HTTP sécurisées
+✅ Protection contre les attaques CSRF
+✅ Headers de sécurité (Helmet)
+✅ Rate limiting (100 requêtes / 15 min)
+✅ Validation des entrées
+
+
+💾 SAUVEGARDE DES DONNÉES
+──────────────────────────────────────────────────────────────────────────────
+Toutes les données sont stockées dans : database.sqlite
+
+POUR SAUVEGARDER :
+   • Copiez le fichier database.sqlite
+   • Stockez-le en lieu sûr
+
+POUR RESTAURER :
+   • Remplacez database.sqlite par votre sauvegarde
+   • Redémarrez le serveur
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                        STRUCTURE DU PROJET
+═══════════════════════════════════════════════════════════════════════════════
+
+osteoupgrade-v3/
+├── server.js                 # Serveur principal
+├── package.json             # Configuration npm
+├── .env                     # Variables d'environnement
+├── database.sqlite          # Base de données (créée après init)
+├── config/
+│   └── database.js         # Configuration DB
+├── src/
+│   ├── initDatabase.js     # Script d'initialisation
+│   ├── defaultTrees.json   # Arbres par défaut
+│   └── defaultTests.json   # Tests par défaut
+└── public/
+    └── index.html          # Interface utilisateur
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                        API ENDPOINTS (Référence)
+═══════════════════════════════════════════════════════════════════════════════
+
+AUTHENTIFICATION
+POST   /api/auth/login          - Connexion
+POST   /api/auth/register       - Inscription
+POST   /api/auth/logout         - Déconnexion
+GET    /api/auth/me             - Utilisateur connecté
+
+UTILISATEURS (Admin)
+GET    /api/users               - Liste
+POST   /api/users               - Créer
+PUT    /api/users/:id           - Modifier
+DELETE /api/users/:id           - Supprimer
+
+ARBRES DÉCISIONNELS
+GET    /api/trees               - Liste
+GET    /api/trees/:id           - Détail
+POST   /api/trees (Admin)       - Créer
+PUT    /api/trees/:id (Admin)   - Modifier
+DELETE /api/trees/:id (Admin)   - Supprimer
+
+TESTS ORTHOPÉDIQUES
+GET    /api/tests               - Liste
+GET    /api/tests/:id           - Détail
+POST   /api/tests (Admin)       - Créer
+PUT    /api/tests/:id (Admin)   - Modifier
+DELETE /api/tests/:id (Admin)   - Supprimer
+
+DIAGNOSTICS
+POST   /api/diagnostics         - Enregistrer
+GET    /api/diagnostics         - Historique
+GET    /api/diagnostics/:id/pdf - Export PDF
+
+STATISTIQUES (Admin)
+GET    /api/stats               - Dashboard stats
+
+PARAMÈTRES (Admin)
+GET    /api/settings/:key       - Obtenir
+PUT    /api/settings/:key       - Modifier
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                        CONFIGURATION AVANCÉE
+═══════════════════════════════════════════════════════════════════════════════
+
+MODIFIER LE PORT
+──────────────────────────────────────────────────────────────────────────────
+Éditez le fichier .env :
+   PORT=8080
+
+
+CHANGER LA CLÉ DE SESSION (IMPORTANT EN PRODUCTION)
+──────────────────────────────────────────────────────────────────────────────
+Éditez le fichier .env :
+   SESSION_SECRET=votre-cle-secrete-tres-longue-et-aleatoire
+
+
+MODE PRODUCTION
+──────────────────────────────────────────────────────────────────────────────
+Éditez le fichier .env :
+   NODE_ENV=production
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                        RÉSOLUTION DES PROBLÈMES
+═══════════════════════════════════════════════════════════════════════════════
+
+ERREUR : "Cannot find module 'better-sqlite3'"
+──────────────────────────────────────────────────────────────────────────────
+SOLUTION : Relancez npm install
+
+
+ERREUR : "UNIQUE constraint failed: users.email"
+──────────────────────────────────────────────────────────────────────────────
+SOLUTION : Un compte avec cet email existe déjà
+
+
+ERREUR : "Port 3000 already in use"
+──────────────────────────────────────────────────────────────────────────────
+SOLUTION : 
+   • Fermez les autres applications sur le port 3000
+   • OU changez le port dans .env
+
+
+LA BASE DE DONNÉES EST CORROMPUE
+──────────────────────────────────────────────────────────────────────────────
+SOLUTION :
+   1. Supprimez database.sqlite
+   2. Relancez : npm run init-db
+   3. Relancez : npm start
+
+
+JE NE PEUX PAS ME CONNECTER
+──────────────────────────────────────────────────────────────────────────────
+SOLUTION :
+   • Vérifiez l'email : kevin.thubert@gmail.com
+   • Vérifiez le mot de passe : osteoupgrade97
+   • Si oublié, réinitialisez la DB avec init-db
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                    DÉPLOIEMENT SUR RENDER (Production)
+═══════════════════════════════════════════════════════════════════════════════
+
+ÉTAPE 1 : PRÉPARER LE CODE
+──────────────────────────────────────────────────────────────────────────────
+1. Créez un repository GitHub
+2. Poussez tout le code sur GitHub
+3. N'oubliez PAS le fichier .env !
+
+
+ÉTAPE 2 : CONFIGURER RENDER
+──────────────────────────────────────────────────────────────────────────────
+1. Allez sur render.com
+2. Créez un Web Service
+3. Connectez votre repository
+
+   Build Command  : npm install && npm run init-db
+   Start Command  : npm start
+
+
+ÉTAPE 3 : VARIABLES D'ENVIRONNEMENT
+──────────────────────────────────────────────────────────────────────────────
+Dans Render, ajoutez les variables d'environnement :
+
+   NODE_ENV=production
+   SESSION_SECRET=GENEREZ-UNE-CLE-TRES-LONGUE-ET-ALEATOIRE
+   ADMIN_EMAIL=kevin.thubert@gmail.com
+   ADMIN_PASSWORD=osteoupgrade97
+   ADMIN_NAME=Kevin Thubert
+
+
+ÉTAPE 4 : DÉPLOYER
+──────────────────────────────────────────────────────────────────────────────
+Cliquez sur "Create Web Service"
+
+⏳ Attendez 5-10 minutes
+
+✅ Votre app est en ligne !
+
+
+IMPORTANT - PERSISTANCE DES DONNÉES SUR RENDER
+──────────────────────────────────────────────────────────────────────────────
+⚠️  Sur Render gratuit, la base de données sera réinitialisée à chaque redémarrage
+
+SOLUTIONS :
+1. Utilisez Render Persistent Disks (payant)
+2. Migrez vers PostgreSQL (recommandé pour production)
+3. Utilisez un service externe (Supabase, PlanetScale)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                        MIGRATION VERS POSTGRESQL
+═══════════════════════════════════════════════════════════════════════════════
+
+Pour une utilisation en production sur Render, il est recommandé d'utiliser
+PostgreSQL au lieu de SQLite.
+
+Je peux vous aider à migrer ! Demandez-moi quand vous serez prêt.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                        PROCHAINES AMÉLIORATIONS POSSIBLES
+═══════════════════════════════════════════════════════════════════════════════
+
+📱 Application mobile (React Native)
+📧 Notifications par email
+💳 Système de paiement Stripe
+🔔 Alertes et rappels
+📊 Analytics avancés (Google Analytics)
+🌍 Multi-langue
+🎨 Personnalisation du thème
+📱 PWA (Progressive Web App)
+🔄 Synchronisation multi-appareils
+📸 Upload d'images pour les tests
+🎓 Module de formation
+💬 Chat support intégré
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                        SUPPORT ET CONTACT
+═══════════════════════════════════════════════════════════════════════════════
+
+📧 Email : kevin.thubert@gmail.com
+💬 Questions : N'hésitez pas à demander de l'aide !
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                    Merci d'utiliser OsteoUpgrade v3.0 ! 🦴
+                          © 2025 OsteoUpgrade Team
+═══════════════════════════════════════════════════════════════════════════════

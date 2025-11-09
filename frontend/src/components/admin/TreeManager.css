@@ -1,0 +1,125 @@
+.tree-manager {
+  min-height: 400px;
+}
+
+.manager-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.manager-header h3 {
+  color: #2C3E50;
+  font-size: 1.5em;
+}
+
+.btn-create {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #27AE60 0%, #1E8449 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-create:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+}
+
+.trees-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tree-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 25px;
+  background: #F8F9FA;
+  border-radius: 12px;
+  border: 2px solid #E8EDF2;
+  transition: all 0.3s;
+}
+
+.tree-card:hover {
+  border-color: #4A90E2;
+  transform: translateX(5px);
+}
+
+.tree-icon {
+  font-size: 3em;
+}
+
+.tree-info {
+  flex: 1;
+}
+
+.tree-info h4 {
+  color: #2C3E50;
+  margin-bottom: 8px;
+}
+
+.tree-info p {
+  color: #7B8794;
+  margin-bottom: 10px;
+}
+
+.tree-meta {
+  display: flex;
+  gap: 15px;
+  font-size: 0.9em;
+  color: #7B8794;
+}
+
+.tree-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-edit {
+  padding: 10px 20px;
+  background: #4A90E2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-edit:hover {
+  background: #2C5F8D;
+}
+
+.btn-delete {
+  padding: 10px 20px;
+  background: #E74C3C;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-delete:hover {
+  background: #C0392B;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-state p {
+  font-size: 1.2em;
+  color: #7B8794;
+  margin-bottom: 20px;
+}

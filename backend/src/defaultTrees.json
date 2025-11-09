@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Cervicale",
+    "icon": "🦴",
+    "nodes": [
+      {"id": "q1", "type": "question", "text": "Le patient présente-t-il une douleur cervicale ?", "answers": [{"text": "Oui, douleur aiguë", "next": "q2"}, {"text": "Oui, douleur chronique", "next": "q3"}, {"text": "Non", "next": "r1"}]},
+      {"id": "q2", "type": "question", "text": "La douleur irradie-t-elle dans le bras ?", "answers": [{"text": "Oui, avec paresthésies", "next": "r2"}, {"text": "Oui, sans paresthésies", "next": "t1"}, {"text": "Non", "next": "t2"}]},
+      {"id": "q3", "type": "question", "text": "Y a-t-il une limitation de mobilité ?", "answers": [{"text": "Oui, importante", "next": "t3"}, {"text": "Oui, modérée", "next": "t4"}, {"text": "Non", "next": "r3"}]},
+      {"id": "t1", "type": "tests", "text": "Tests à réaliser", "tests": ["Test de Spurling", "Test de distraction cervicale", "Évaluation des réflexes ostéotendineux"], "next": "r4"},
+      {"id": "t2", "type": "tests", "text": "Tests à réaliser", "tests": ["Palpation des muscles cervicaux", "Test de mobilité segmentaire", "Évaluation posturale"], "next": "r5"},
+      {"id": "t3", "type": "tests", "text": "Tests à réaliser", "tests": ["Mesure des amplitudes articulaires", "Test de Sharp-Purser", "Palpation articulaire"], "next": "r6"},
+      {"id": "t4", "type": "tests", "text": "Tests à réaliser", "tests": ["Mobilité active et passive", "Palpation musculaire", "Test postural"], "next": "r7"},
+      {"id": "r1", "type": "result", "severity": "success", "title": "Pas de pathologie cervicale évidente", "description": "L'examen ne révèle pas de douleur cervicale.", "recommendations": ["Vérifier les autres zones du corps", "Évaluer la posture globale"]},
+      {"id": "r2", "type": "result", "severity": "danger", "title": "🚩 DRAPEAU ROUGE - Possible névralgie cervico-brachiale", "description": "Douleur irradiante avec paresthésies suggère une atteinte radiculaire.", "recommendations": ["ORIENTATION MÉDICALE URGENTE", "IRM cervicale à prescrire", "Pas de manipulation avant imagerie"]},
+      {"id": "r3", "type": "result", "severity": "success", "title": "Douleur chronique sans limitation", "description": "Douleur chronique sans restriction significative de mobilité.", "recommendations": ["Techniques douces de mobilisation", "Travail postural", "Exercices de renforcement progressif"]},
+      {"id": "r4", "type": "result", "severity": "warning", "title": "Possible compression radiculaire", "description": "Les tests suggèrent une irritation radiculaire sans signes neurologiques majeurs.", "recommendations": ["Techniques de décompression", "Mobilisation douce", "Réévaluation après 2-3 séances"]},
+      {"id": "r5", "type": "result", "severity": "success", "title": "Tension musculaire cervicale", "description": "Contracture musculaire sans atteinte structurelle majeure.", "recommendations": ["Techniques de relâchement musculaire", "Mobilisation articulaire douce", "Conseils ergonomiques"]},
+      {"id": "r6", "type": "result", "severity": "warning", "title": "Limitation importante de mobilité", "description": "Restriction articulaire significative nécessitant une approche progressive.", "recommendations": ["Mobilisation progressive", "Techniques de gain d'amplitude", "Surveillance de l'évolution"]},
+      {"id": "r7", "type": "result", "severity": "success", "title": "Restriction modérée", "description": "Limitation de mobilité modérée d'origine probablement fonctionnelle.", "recommendations": ["Mobilisation articulaire", "Renforcement musculaire", "Correction posturale"]}
+    ]
+  }
+]

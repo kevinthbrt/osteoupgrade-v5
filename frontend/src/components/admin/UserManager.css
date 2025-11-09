@@ -1,0 +1,76 @@
+.user-manager h3 {
+  color: #2C3E50;
+  margin-bottom: 30px;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th {
+  background: #4A90E2;
+  color: white;
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.users-table td {
+  padding: 15px;
+  border-bottom: 1px solid #E8EDF2;
+}
+
+.users-table tr:hover {
+  background: #F8F9FA;
+}
+
+.users-table tr.inactive {
+  opacity: 0.6;
+}
+
+.badge {
+  padding: 5px 12px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-admin {
+  background: #E74C3C;
+  color: white;
+}
+
+.badge-premium {
+  background: #F39C12;
+  color: white;
+}
+
+.badge-freemium {
+  background: #95A5A6;
+  color: white;
+}
+
+.btn-toggle {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.btn-toggle.active {
+  background: #27AE60;
+  color: white;
+}
+
+.btn-toggle.inactive {
+  background: #E74C3C;
+  color: white;
+}
+
+.btn-toggle:hover {
+  opacity: 0.8;
+}

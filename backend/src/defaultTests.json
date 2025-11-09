@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "region": "Cervicale",
+    "name": "Test de Spurling",
+    "description": "Le patient est assis. Le praticien effectue une compression axiale sur la tête du patient en extension et rotation du côté testé. Un test positif reproduit les symptômes radiculaires.",
+    "sensitivity": 30,
+    "specificity": 93,
+    "lrPlus": 4.3,
+    "lrMinus": 0.75,
+    "videoUrl": "https://www.youtube.com/watch?v=EGl9hB-X5mg",
+    "references": "Malanga GA et al. Mayo Clin Proc. 2014;89(8):1069-1083.",
+    "interpretation": "Un test positif suggère une compression radiculaire cervicale. La spécificité élevée en fait un bon test de confirmation."
+  },
+  {
+    "id": 2,
+    "region": "Genou",
+    "name": "Test de Lachman",
+    "description": "Patient en décubitus dorsal, genou fléchi à 20-30°. Le praticien stabilise le fémur et tire le tibia antérieurement. Un test positif montre une translation antérieure excessive.",
+    "sensitivity": 85,
+    "specificity": 94,
+    "lrPlus": 14.2,
+    "lrMinus": 0.16,
+    "videoUrl": "https://www.youtube.com/watch?v=MYJhB2R1bXk",
+    "references": "Solomon DH et al. JAMA. 2001;286(13):1610-1620.",
+    "interpretation": "Test de référence pour le diagnostic de rupture du LCA. Excellente sensibilité et spécificité."
+  }
+]
