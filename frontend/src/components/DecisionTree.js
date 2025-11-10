@@ -39,6 +39,9 @@ function DecisionTree({ treeId, onBack }) {
   };
 
   const saveDiagnostic = async (resultNode) => {
+    // Éviter les doubles sauvegardes
+    if (pdfId) return;
+    
     try {
       const data = {
         tree_id: treeId,
@@ -57,15 +60,20 @@ function DecisionTree({ treeId, onBack }) {
     }
   };
 
+  // Effet pour sauvegarder le diagnostic une seule fois
+  useEffect(() => {
+    if (tree && currentNodeId) {
+      const currentNode = tree.nodes.find(n => n.id === currentNodeId);
+      if (currentNode && currentNode.type === 'result' && !pdfId) {
+        saveDiagnostic(currentNode);
+      }
+    }
+  }, [currentNodeId, tree]);
+
   if (!tree) return <div className="loading">Chargement de l'arbre...</div>;
 
   const currentNode = tree.nodes.find(n => n.id === currentNodeId);
   if (!currentNode) return <div>Erreur: nœud introuvable</div>;
-
-  // Si c'est un résultat, sauvegarder le diagnostic
-  if (currentNode.type === 'result' && !pdfId) {
-    saveDiagnostic(currentNode);
-  }
 
   return (
     <div className="decision-tree">

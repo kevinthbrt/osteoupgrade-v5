@@ -6,6 +6,8 @@ import HomeDashboard from './components/HomeDashboard';
 import Dashboard from './components/Dashboard';
 import DecisionTree from './components/DecisionTree';
 import Admin from './components/Admin';
+import TestsViewer from './components/TestsViewer';
+import UserSettings from './components/UserSettings';
 import './App.css';
 
 function App() {
@@ -14,6 +16,8 @@ function App() {
   const [showAdmin, setShowAdmin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showTreeSelector, setShowTreeSelector] = useState(false);
+  const [showTests, setShowTests] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -67,6 +71,8 @@ function App() {
     setShowAdmin(false);
     setShowTreeSelector(false);
     setSelectedTreeId(null);
+    setShowTests(false);
+    setShowSettings(false);
 
     switch (destination) {
       case 'home':
@@ -80,6 +86,12 @@ function App() {
         break;
       case 'admin':
         setShowAdmin(true);
+        break;
+      case 'tests':
+        setShowTests(true);
+        break;
+      case 'settings':
+        setShowSettings(true);
         break;
       case 'upgrade':
         // TODO: Page upgrade Premium
@@ -137,11 +149,17 @@ function App() {
               <span className="user-name">{user.name}</span>
               <span className="user-status">{user.status}</span>
             </div>
+            <button className="btn-header" onClick={() => handleNavigate('tests')}>
+              🏥 Tests
+            </button>
             {user.status === 'admin' && (
               <button className="btn-admin" onClick={() => handleNavigate('admin')}>
                 🔧 Admin
               </button>
             )}
+            <button className="btn-header" onClick={() => handleNavigate('settings')}>
+              ⚙️
+            </button>
             <button className="btn-logout" onClick={handleLogout}>
               Déconnexion
             </button>
@@ -152,6 +170,14 @@ function App() {
       <main className="app-main">
         {showAdmin ? (
           <Admin onBack={() => handleNavigate('home')} />
+        ) : showTests ? (
+          <TestsViewer onBack={() => handleNavigate('home')} />
+        ) : showSettings ? (
+          <UserSettings 
+            user={user} 
+            onBack={() => handleNavigate('home')}
+            onUpdate={checkAuth}
+          />
         ) : selectedTreeId ? (
           <DecisionTree
             treeId={selectedTreeId}

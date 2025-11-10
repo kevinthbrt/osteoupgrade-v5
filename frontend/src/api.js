@@ -121,7 +121,9 @@ class API {
   }
 
   static downloadPdf(id) {
-    window.open(`/api/diagnostics/${id}/pdf`, '_blank');
+    // Utiliser le chemin complet avec le proxy
+    const url = `/api/diagnostics/${id}/pdf`;
+    window.open(url, '_blank');
   }
 
   // Utilisateurs (admin)
@@ -140,6 +142,13 @@ class API {
     return await this.request(`/api/users/${id}`, {
       method: 'PUT',
       body: JSON.stringify(userData)
+    });
+  }
+
+  static async updatePassword(userId, currentPassword, newPassword) {
+    return await this.request(`/api/users/${userId}/password`, {
+      method: 'PUT',
+      body: JSON.stringify({ currentPassword, newPassword })
     });
   }
 

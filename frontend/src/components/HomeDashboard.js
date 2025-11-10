@@ -6,6 +6,7 @@ function HomeDashboard({ user, onNavigate }) {
   const [stats, setStats] = useState(null);
   const [recentDiagnostics, setRecentDiagnostics] = useState([]);
   const [trees, setTrees] = useState([]);
+  const [dailyTip, setDailyTip] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,13 +15,15 @@ function HomeDashboard({ user, onNavigate }) {
 
   const loadDashboardData = async () => {
     try {
-      const [treesData, diagnosticsData] = await Promise.all([
+      const [treesData, diagnosticsData, tipSetting] = await Promise.all([
         API.getTrees(),
-        API.getDiagnostics().catch(() => [])
+        API.getDiagnostics().catch(() => []),
+        API.getSetting('daily_tip').catch(() => ({ value: 'OsteoUpgrade utilise des arbres décisionnels basés sur des références scientifiques pour vous guider dans votre diagnostic ostéopathique.' }))
       ]);
 
       setTrees(treesData);
       setRecentDiagnostics(diagnosticsData.slice(0, 5));
+      setDailyTip(tipSetting.value);
 
       // Si admin, charger les stats
       if (user.status === 'admin') {
@@ -88,6 +91,15 @@ function HomeDashboard({ user, onNavigate }) {
           />
         </div>
       )}
+
+      {/* Le saviez-vous - Pour tous */}
+      <div className="daily-tip-banner">
+        <div className="tip-icon">💡</div>
+        <div className="tip-content">
+          <h4>Le saviez-vous ?</h4>
+          <p>{dailyTip}</p>
+        </div>
+      </div>
 
       <div className="dashboard-content">
         {/* Colonne gauche */}
@@ -199,29 +211,19 @@ function HomeDashboard({ user, onNavigate }) {
             )}
           </div>
 
-          {/* Conseils / Infos */}
-          <div className="info-card">
-            <h4>💡 Le saviez-vous ?</h4>
-            <p>
-              OsteoUpgrade utilise des arbres décisionnels basés sur des références 
-              scientifiques pour vous guider dans votre diagnostic ostéopathique.
-            </p>
-            {user.status === 'freemium' && (
-              <>
-                <hr />
-                <div className="upgrade-cta">
-                  <strong>⭐ Passez à Premium</strong>
-                  <p>Accédez à tous les arbres décisionnels sans limitation !</p>
-                  <button
-                    className="btn-upgrade-small"
-                    onClick={() => onNavigate('upgrade')}
-                  >
-                    En savoir plus
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+          {/* Upgrade CTA pour Freemium */}
+          {user.status === 'freemium' && (
+            <div className="upgrade-card">
+              <h4>⭐ Passez à Premium</h4>
+              <p>Accédez à tous les arbres décisionnels sans limitation !</p>
+              <button
+                className="btn-upgrade-full"
+                onClick={() => onNavigate('upgrade')}
+              >
+                En savoir plus
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

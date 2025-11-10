@@ -135,6 +135,23 @@ body {
   color: #4A90E2;
 }
 
+.btn-header {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  color: white;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-header:hover {
+  background: white;
+  color: #4A90E2;
+}
+
 .app-main {
   flex: 1;
   padding: 40px 20px;

@@ -224,6 +224,43 @@ app.put('/api/users/:id', requireAdmin, async (req, res) => {
     }
 });
 
+// Changer le mot de passe (utilisateur connecté)
+app.put('/api/users/:id/password', requireAuth, async (req, res) => {
+    try {
+        const userId = parseInt(req.params.id);
+        const { currentPassword, newPassword } = req.body;
+        
+        // Vérifier que l'utilisateur modifie son propre mot de passe
+        if (userId !== req.session.userId) {
+            return res.status(403).json({ error: 'Non autorisé' });
+        }
+        
+        // Récupérer l'utilisateur
+        const user = db.prepare('SELECT password FROM users WHERE id = ?').get(userId);
+        
+        if (!user) {
+            return res.status(404).json({ error: 'Utilisateur non trouvé' });
+        }
+        
+        // Vérifier le mot de passe actuel
+        const validPassword = await bcrypt.compare(currentPassword, user.password);
+        if (!validPassword) {
+            return res.status(401).json({ error: 'Mot de passe actuel incorrect' });
+        }
+        
+        // Hasher le nouveau mot de passe
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        
+        // Mettre à jour
+        db.prepare('UPDATE users SET password = ? WHERE id = ?').run(hashedPassword, userId);
+        
+        res.json({ message: 'Mot de passe modifié avec succès' });
+    } catch (error) {
+        console.error('Erreur changement mot de passe:', error);
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
+});
+
 // Supprimer un utilisateur (admin)
 app.delete('/api/users/:id', requireAdmin, (req, res) => {
     const userId = req.params.id;

@@ -6,6 +6,7 @@ function SettingsManager() {
   const [trees, setTrees] = useState([]);
   const [freemiumTreeId, setFreemiumTreeId] = useState('');
   const [premiumPrice, setPremiumPrice] = useState('');
+  const [dailyTip, setDailyTip] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,15 +15,17 @@ function SettingsManager() {
 
   const loadData = async () => {
     try {
-      const [treesData, freemiumSetting, priceSetting] = await Promise.all([
+      const [treesData, freemiumSetting, priceSetting, tipSetting] = await Promise.all([
         API.getTrees(),
         API.getSetting('freemium_tree_id').catch(() => ({ value: '1' })),
-        API.getSetting('premium_price').catch(() => ({ value: '29.99' }))
+        API.getSetting('premium_price').catch(() => ({ value: '29.99' })),
+        API.getSetting('daily_tip').catch(() => ({ value: 'OsteoUpgrade utilise des arbres décisionnels basés sur des références scientifiques pour vous guider dans votre diagnostic ostéopathique.' }))
       ]);
       
       setTrees(treesData);
       setFreemiumTreeId(freemiumSetting.value);
       setPremiumPrice(priceSetting.value);
+      setDailyTip(tipSetting.value);
     } catch (error) {
       console.error('Erreur:', error);
     } finally {
@@ -44,6 +47,16 @@ function SettingsManager() {
     try {
       await API.setSetting('premium_price', premiumPrice);
       alert('Prix Premium enregistré');
+    } catch (error) {
+      console.error('Erreur:', error);
+      alert('Erreur lors de la sauvegarde');
+    }
+  };
+
+  const saveDailyTip = async () => {
+    try {
+      await API.setSetting('daily_tip', dailyTip);
+      alert('Conseil enregistré');
     } catch (error) {
       console.error('Erreur:', error);
       alert('Erreur lors de la sauvegarde');
@@ -109,6 +122,33 @@ function SettingsManager() {
         </div>
         <p className="setting-info">
           Les comptes Premium auront accès à tous les arbres décisionnels.
+        </p>
+      </div>
+
+      {/* Le saviez-vous */}
+      <div className="setting-section">
+        <h4>💡 Le saviez-vous ?</h4>
+        <p className="section-description">
+          Personnalisez le conseil affiché sur la page d'accueil des utilisateurs
+        </p>
+        <div className="tip-editor">
+          <textarea
+            value={dailyTip}
+            onChange={(e) => setDailyTip(e.target.value)}
+            placeholder="Entrez votre conseil du jour..."
+            rows={4}
+            maxLength={500}
+            className="tip-textarea"
+          />
+          <div className="tip-footer">
+            <span className="char-count">{dailyTip.length}/500 caractères</span>
+            <button className="btn-save" onClick={saveDailyTip}>
+              💾 Enregistrer
+            </button>
+          </div>
+        </div>
+        <p className="setting-info">
+          Ce texte apparaîtra dans l'encart "Le saviez-vous ?" sur le dashboard de tous les utilisateurs.
         </p>
       </div>
 
