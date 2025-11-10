@@ -121,8 +121,8 @@ class API {
   }
 
   static downloadPdf(id) {
-    // Utiliser le chemin complet avec le proxy
-    const url = `/api/diagnostics/${id}/pdf`;
+    // Utiliser directement le port backend (3000) car le proxy ne fonctionne pas pour window.open
+    const url = `http://localhost:3000/api/diagnostics/${id}/pdf`;
     window.open(url, '_blank');
   }
 

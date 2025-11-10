@@ -200,7 +200,10 @@ function HomeDashboard({ user, onNavigate }) {
                     </div>
                     <button
                       className="activity-action"
-                      onClick={() => API.downloadPdf(diag.id)}
+                      onClick={() => {
+                        // Utiliser le port backend directement
+                        window.open(`http://localhost:3000/api/diagnostics/${diag.id}/pdf`, '_blank');
+                      }}
                       title="Télécharger le PDF"
                     >
                       📄

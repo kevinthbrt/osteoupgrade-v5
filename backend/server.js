@@ -546,6 +546,11 @@ app.get('/api/diagnostics/:id/pdf', requireAuth, (req, res) => {
         }
         
         diagnostic.recommendations = JSON.parse(diagnostic.recommendations);
+        const path = JSON.parse(diagnostic.path);
+        
+        // Récupérer l'arbre pour avoir les questions
+        const tree = db.prepare('SELECT data FROM decision_trees WHERE id = ?').get(diagnostic.tree_id);
+        const treeData = tree ? JSON.parse(tree.data) : null;
         
         // Créer le PDF
         const doc = new PDFDocument({ margin: 50 });
@@ -557,7 +562,7 @@ app.get('/api/diagnostics/:id/pdf', requireAuth, (req, res) => {
         
         // En-tête
         doc.fontSize(24).fillColor('#4A90E2').text('OsteoUpgrade', { align: 'center' });
-        doc.fontSize(12).fillColor('#7B8794').text('Rapport de Diagnostic Ostéopathique', { align: 'center' });
+        doc.fontSize(12).fillColor('#7B8794').text('Rapport de Diagnostic Osteopathique', { align: 'center' });
         doc.moveDown(2);
         
         // Informations patient
@@ -568,11 +573,38 @@ app.get('/api/diagnostics/:id/pdf', requireAuth, (req, res) => {
         doc.text(`Date : ${new Date(diagnostic.created_at).toLocaleDateString('fr-FR', { 
             year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' 
         })}`);
-        doc.text(`Zone examinée : ${diagnostic.tree_name}`);
+        doc.text(`Zone examinee : ${diagnostic.tree_name}`);
         doc.moveDown(2);
         
+        // Enchaînement de questions
+        if (treeData && path && path.length > 0) {
+            doc.fontSize(16).fillColor('#2C3E50').text('Enchainement du diagnostic', { underline: true });
+            doc.moveDown(0.5);
+            
+            // Parcourir le chemin
+            for (let i = 0; i < path.length - 1; i++) { // -1 pour exclure le nœud résultat
+                const nodeId = path[i];
+                const node = treeData.nodes.find(n => n.id === nodeId);
+                
+                if (node && node.type === 'question') {
+                    doc.fontSize(11).fillColor('#4A90E2').text(`Q${i + 1}: ${node.question}`, { continued: false });
+                    
+                    // Trouver la réponse choisie
+                    if (i + 1 < path.length) {
+                        const nextNodeId = path[i + 1];
+                        const chosenOption = node.options.find(opt => opt.next === nextNodeId);
+                        if (chosenOption) {
+                            doc.fontSize(10).fillColor('#27AE60').text(`   Reponse: ${chosenOption.text}`, { indent: 20 });
+                        }
+                    }
+                    doc.moveDown(0.8);
+                }
+            }
+            doc.moveDown(1);
+        }
+        
         // Résultat
-        doc.fontSize(16).fillColor('#2C3E50').text('Résultat du Diagnostic', { underline: true });
+        doc.fontSize(16).fillColor('#2C3E50').text('Resultat du Diagnostic', { underline: true });
         doc.moveDown(0.5);
         
         // Titre du résultat avec couleur selon sévérité
@@ -580,7 +612,13 @@ app.get('/api/diagnostics/:id/pdf', requireAuth, (req, res) => {
         if (diagnostic.result_severity === 'warning') titleColor = '#F39C12';
         if (diagnostic.result_severity === 'danger') titleColor = '#E74C3C';
         
-        doc.fontSize(14).fillColor(titleColor).text(diagnostic.result_title);
+        // Nettoyer le titre (enlever les emojis problématiques)
+        let cleanTitle = diagnostic.result_title
+            .replace(/[^\x00-\x7F]/g, '') // Enlever caractères non-ASCII
+            .replace(/DRAPEAU ROUGE/, 'DRAPEAU ROUGE')
+            .trim();
+        
+        doc.fontSize(14).fillColor(titleColor).text(cleanTitle);
         doc.moveDown(0.5);
         
         doc.fontSize(11).fillColor('#000').text(diagnostic.result_description, { align: 'justify' });
@@ -591,7 +629,9 @@ app.get('/api/diagnostics/:id/pdf', requireAuth, (req, res) => {
         doc.moveDown(0.5);
         
         diagnostic.recommendations.forEach((rec, index) => {
-            doc.fontSize(11).fillColor('#000').text(`${index + 1}. ${rec}`, { indent: 20 });
+            // Nettoyer les recommandations aussi
+            const cleanRec = rec.replace(/[^\x00-\x7F]/g, '').trim();
+            doc.fontSize(11).fillColor('#000').text(`${index + 1}. ${cleanRec}`, { indent: 20 });
             doc.moveDown(0.3);
         });
         
@@ -599,14 +639,14 @@ app.get('/api/diagnostics/:id/pdf', requireAuth, (req, res) => {
         
         // Pied de page
         doc.fontSize(9).fillColor('#7B8794').text(
-            'Ce document est généré automatiquement par OsteoUpgrade et ne constitue pas un document médical officiel.',
+            'Ce document est genere automatiquement par OsteoUpgrade et ne constitue pas un document medical officiel.',
             { align: 'center' }
         );
         
         doc.end();
     } catch (error) {
-        console.error('Erreur génération PDF:', error);
-        res.status(500).json({ error: 'Erreur lors de la génération du PDF' });
+        console.error('Erreur generation PDF:', error);
+        res.status(500).json({ error: 'Erreur lors de la generation du PDF' });
     }
 });
 

@@ -149,6 +149,12 @@ function App() {
               <span className="user-name">{user.name}</span>
               <span className="user-status">{user.status}</span>
             </div>
+            <button className="btn-header" onClick={() => handleNavigate('home')}>
+              🏠 Accueil
+            </button>
+            <button className="btn-header" onClick={() => handleNavigate('trees')}>
+              🌳 Arbres
+            </button>
             <button className="btn-header" onClick={() => handleNavigate('tests')}>
               🏥 Tests
             </button>
