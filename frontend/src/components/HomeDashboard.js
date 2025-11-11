@@ -1,3 +1,4 @@
+// frontend/src/components/HomeDashboard.js
 import React, { useState, useEffect } from 'react';
 import API from '../api';
 import './HomeDashboard.css';
@@ -11,6 +12,7 @@ function HomeDashboard({ user, onNavigate }) {
 
   useEffect(() => {
     loadDashboardData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadDashboardData = async () => {
@@ -18,15 +20,17 @@ function HomeDashboard({ user, onNavigate }) {
       const [treesData, diagnosticsData, tipSetting] = await Promise.all([
         API.getTrees(),
         API.getDiagnostics().catch(() => []),
-        API.getSetting('daily_tip').catch(() => ({ value: 'OsteoUpgrade utilise des arbres décisionnels basés sur des références scientifiques pour vous guider dans votre diagnostic ostéopathique.' }))
+        API.getSetting('daily_tip').catch(() => ({
+          value:
+            "OsteoUpgrade utilise des arbres décisionnels basés sur des références scientifiques pour vous guider dans votre diagnostic ostéopathique."
+        }))
       ]);
 
-      setTrees(treesData);
-      setRecentDiagnostics(diagnosticsData.slice(0, 5));
-      setDailyTip(tipSetting.value);
+      setTrees(Array.isArray(treesData) ? treesData : []);
+      setRecentDiagnostics((diagnosticsData || []).slice(0, 5));
+      setDailyTip(tipSetting?.value || '');
 
-      // Si admin, charger les stats
-      if (user.status === 'admin') {
+      if (user?.status === 'admin') {
         const statsData = await API.getStats();
         setStats(statsData);
       }
@@ -50,49 +54,29 @@ function HomeDashboard({ user, onNavigate }) {
       {/* En-tête de bienvenue */}
       <div className="welcome-header">
         <div className="welcome-content">
-          <h2>Bienvenue, {user.name.split(' ')[0]} ! 👋</h2>
+          <h2>Bienvenue, {String(user?.name || user?.email || '').split(' ')[0]} ! 👋</h2>
           <p>Tableau de bord - OsteoUpgrade</p>
         </div>
         <div className="user-badge">
-          <span className={`status-badge status-${user.status}`}>
-            {user.status === 'admin' && '👑 Admin'}
-            {user.status === 'premium' && '⭐ Premium'}
-            {user.status === 'freemium' && '🆓 Freemium'}
+          <span className={`status-badge status-${user?.status}`}>
+            {user?.status === 'admin' && '👑 Admin'}
+            {user?.status === 'premium' && '⭐ Premium'}
+            {user?.status === 'freemium' && '🆓 Freemium'}
           </span>
         </div>
       </div>
 
       {/* Statistiques (Admin uniquement) */}
-      {user.status === 'admin' && stats && (
+      {user?.status === 'admin' && stats && (
         <div className="stats-grid">
-          <StatCard
-            icon="👥"
-            title="Utilisateurs"
-            value={stats.totalUsers}
-            color="#4A90E2"
-          />
-          <StatCard
-            icon="📊"
-            title="Diagnostics"
-            value={stats.totalDiagnostics}
-            color="#27AE60"
-          />
-          <StatCard
-            icon="🌳"
-            title="Arbres"
-            value={stats.totalTrees}
-            color="#F39C12"
-          />
-          <StatCard
-            icon="🏥"
-            title="Tests"
-            value={stats.totalTests}
-            color="#E74C3C"
-          />
+          <StatCard icon="👥" title="Utilisateurs" value={stats.totalUsers} color="#4A90E2" />
+          <StatCard icon="📊" title="Diagnostics" value={stats.totalDiagnostics} color="#27AE60" />
+          <StatCard icon="🌳" title="Arbres" value={stats.totalTrees} color="#F39C12" />
+          <StatCard icon="🏥" title="Tests" value={stats.totalTests} color="#E74C3C" />
         </div>
       )}
 
-      {/* Le saviez-vous - Pour tous */}
+      {/* Le saviez-vous */}
       <div className="daily-tip-banner">
         <div className="tip-icon">💡</div>
         <div className="tip-content">
@@ -108,29 +92,20 @@ function HomeDashboard({ user, onNavigate }) {
           <div className="quick-access">
             <h3>🚀 Accès rapides</h3>
             <div className="quick-buttons">
-              <button
-                className="quick-btn primary"
-                onClick={() => onNavigate('trees')}
-              >
+              <button className="quick-btn primary" onClick={() => onNavigate('trees')}>
                 <span className="btn-icon">🌳</span>
                 <span>Commencer un diagnostic</span>
               </button>
-              
-              {user.status === 'admin' && (
-                <button
-                  className="quick-btn admin"
-                  onClick={() => onNavigate('admin')}
-                >
+
+              {user?.status === 'admin' && (
+                <button className="quick-btn admin" onClick={() => onNavigate('admin')}>
                   <span className="btn-icon">🔧</span>
                   <span>Panneau Admin</span>
                 </button>
               )}
 
-              {user.status === 'freemium' && (
-                <button
-                  className="quick-btn upgrade"
-                  onClick={() => onNavigate('upgrade')}
-                >
+              {user?.status === 'freemium' && (
+                <button className="quick-btn upgrade" onClick={() => onNavigate('upgrade')}>
                   <span className="btn-icon">⭐</span>
                   <span>Passer à Premium</span>
                 </button>
@@ -145,22 +120,19 @@ function HomeDashboard({ user, onNavigate }) {
               <p className="empty-message">Aucun arbre disponible pour le moment</p>
             ) : (
               <div className="trees-list-compact">
-                {trees.slice(0, 4).map(tree => (
+                {trees.slice(0, 4).map((tree) => (
                   <div
                     key={tree.id}
                     className="tree-compact"
                     onClick={() => onNavigate('tree', tree.id)}
                   >
-                    <span className="tree-icon">{tree.icon}</span>
-                    <span className="tree-name">{tree.name}</span>
+                    <span className="tree-icon">🌳</span>
+                    <span className="tree-name">{tree.title}</span>
                     <span className="tree-arrow">→</span>
                   </div>
                 ))}
                 {trees.length > 4 && (
-                  <button
-                    className="see-more"
-                    onClick={() => onNavigate('trees')}
-                  >
+                  <button className="see-more" onClick={() => onNavigate('trees')}>
                     Voir tous les arbres ({trees.length})
                   </button>
                 )}
@@ -178,16 +150,13 @@ function HomeDashboard({ user, onNavigate }) {
               <div className="empty-state">
                 <p className="empty-icon">📊</p>
                 <p>Aucun diagnostic réalisé</p>
-                <button
-                  className="btn-start"
-                  onClick={() => onNavigate('trees')}
-                >
+                <button className="btn-start" onClick={() => onNavigate('trees')}>
                   Commencer maintenant
                 </button>
               </div>
             ) : (
               <div className="activity-list">
-                {recentDiagnostics.map(diag => (
+                {recentDiagnostics.map((diag) => (
                   <div key={diag.id} className="activity-item">
                     <div className="activity-icon">
                       <span className={`severity-dot severity-${diag.result_severity}`}></span>
@@ -200,10 +169,9 @@ function HomeDashboard({ user, onNavigate }) {
                     </div>
                     <button
                       className="activity-action"
-                      onClick={() => {
-                        // Utiliser le port backend directement
-                        window.open(`http://localhost:3000/api/diagnostics/${diag.id}/pdf`, '_blank');
-                      }}
+                      onClick={() =>
+                        alert("Export PDF non encore implémenté (à faire via Supabase Edge Function)")
+                      }
                       title="Télécharger le PDF"
                     >
                       📄
@@ -215,14 +183,11 @@ function HomeDashboard({ user, onNavigate }) {
           </div>
 
           {/* Upgrade CTA pour Freemium */}
-          {user.status === 'freemium' && (
+          {user?.status === 'freemium' && (
             <div className="upgrade-card">
               <h4>⭐ Passez à Premium</h4>
               <p>Accédez à tous les arbres décisionnels sans limitation !</p>
-              <button
-                className="btn-upgrade-full"
-                onClick={() => onNavigate('upgrade')}
-              >
+              <button className="btn-upgrade-full" onClick={() => onNavigate('upgrade')}>
                 En savoir plus
               </button>
             </div>
@@ -257,11 +222,11 @@ function formatDate(dateString) {
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
 
-  if (diffMins < 1) return 'À l\'instant';
+  if (diffMins < 1) return "À l'instant";
   if (diffMins < 60) return `Il y a ${diffMins} min`;
   if (diffHours < 24) return `Il y a ${diffHours}h`;
   if (diffDays < 7) return `Il y a ${diffDays}j`;
-  
+
   return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
 }
 
