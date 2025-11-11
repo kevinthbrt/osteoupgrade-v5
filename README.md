@@ -39,9 +39,9 @@ npm install
 npm start
 ```
 
-**Connexion admin :**
-- Email: `kevin.thubert@gmail.com`
-- Password: `osteoupgrade97`
+### Connexion admin (démo)
+Créez un compte via l'API de seed ou via l'interface d’administration (mot de passe non public).
+
 
 ---
 
