@@ -10,11 +10,17 @@ const API = {
     return { id: u.id, email: u.email, name: u.user_metadata?.name || u.email, status: "user" };
   },
   async register(email, password, name) {
-    const { error } = await supabase.auth.signUp({
-      email, password, options: { data: { name } }
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { name },
+        emailRedirectTo: window.location.origin, // redirection après clic du lien
+      },
     });
-    if (error) throw new Error(msg(error, "Échec de l'inscription"));
-    return true;
+    if (error) throw new Error(error.message || "Échec de l'inscription");
+    // data.session === null si la confirmation d’email est requise
+    return { user: data.user, session: data.session };
   },
   async logout() { const { error } = await supabase.auth.signOut(); if (error) throw new Error(msg(error)); },
   async me() {

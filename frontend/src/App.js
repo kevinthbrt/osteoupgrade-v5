@@ -49,15 +49,23 @@ function App() {
   };
 
   const handleRegister = async (email, password, name) => {
-    try {
-      await API.register(email, password, name);
-      // Connexion automatique après inscription
+  try {
+    const { session } = await API.register(email, password, name);
+
+    if (session) {
+      // Cas sans confirmation d’email (ou confirm OFF) : login direct
       await handleLogin(email, password);
-    } catch (error) {
-      console.error('❌ Erreur inscription:', error);
-      throw error;
+    } else {
+      // Cas avec confirmation d’email : on n’essaie PAS de se connecter
+      alert("Un e-mail de confirmation t’a été envoyé. Clique le lien puis reviens te connecter.");
+      setShowRegister(false); // retour à l’écran de connexion
     }
-  };
+  } catch (error) {
+    console.error('❌ Erreur inscription:', error);
+    throw error;
+  }
+};
+
 
   const handleLogout = async () => {
     await API.logout();
