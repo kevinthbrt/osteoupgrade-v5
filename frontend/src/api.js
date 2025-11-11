@@ -1,177 +1,82 @@
-// Module API pour communiquer avec le backend
-const API_BASE = '';
+﻿import { supabase } from "./supabaseClient";
 
-class API {
-  static async request(endpoint, options = {}) {
-    try {
-      const response = await fetch(API_BASE + endpoint, {
-        ...options,
-        headers: {
-          'Content-Type': 'application/json',
-          ...options.headers
-        },
-        credentials: 'include'
-      });
+const msg = (e, f="Erreur") => e?.message || e?.error_description || f;
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || `Erreur HTTP: ${response.status}`);
-      }
-      
-      return data;
-    } catch (error) {
-      console.error('API Error:', error);
-      throw error;
-    }
-  }
-
-  // Authentification
-  static async login(email, password) {
-    return await this.request('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password })
+const API = {
+  // AUTH
+  async login(email, password) {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw new Error(msg(error, "Échec de connexion"));
+    const u = data.user;
+    await supabase.from("users").upsert({ id: u.id, email: u.email }, { onConflict: "id" });
+    return { id: u.id, email: u.email, name: u.user_metadata?.name || u.email, status: "user" };
+  },
+  async register(email, password, name) {
+    const { error } = await supabase.auth.signUp({
+      email, password, options: { data: { name } }
     });
-  }
+    if (error) throw new Error(msg(error, "Échec de l'inscription"));
+    return true;
+  },
+  async logout() {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw new Error(msg(error, "Échec de déconnexion"));
+  },
+  async me() {
+    const { data:{ user } } = await supabase.auth.getUser();
+    if (!user) throw new Error("Pas de session");
+    const { data: row } = await supabase.from("users").select("*").eq("id", user.id).single();
+    return { id: user.id, email: user.email, name: row?.name || user.user_metadata?.name || user.email, status: row?.role || "user" };
+  },
 
-  static async register(email, password, name) {
-    return await this.request('/api/auth/register', {
-      method: 'POST',
-      body: JSON.stringify({ email, password, name })
-    });
-  }
+  // TREES (minimaux pour bosser à deux)
+  async getTrees() {
+    const { data, error } = await supabase.from("trees").select("id,title,updated_at").order("updated_at", { ascending:false });
+    if (error) { console.warn("trees:", error.message); return []; }
+    return data || [];
+  },
+  async getTree(id) {
+    const { data, error } = await supabase.from("trees").select("*").eq("id", id).single();
+    if (error) throw new Error(msg(error));
+    return data;
+  },
+  async createTree(t) {
+    const { error } = await supabase.from("trees").insert({ title: t.title, data: t.data || {} });
+    if (error) throw new Error(msg(error));
+  },
+  async updateTree(id, t) {
+    const { error } = await supabase.from("trees").update({ title: t.title, data: t.data || {} }).eq("id", id);
+    if (error) throw new Error(msg(error));
+  },
+  async deleteTree(id) {
+    const { error } = await supabase.from("trees").delete().eq("id", id);
+    if (error) throw new Error(msg(error));
+  },
 
-  static async logout() {
-    return await this.request('/api/auth/logout', { method: 'POST' });
-  }
+  // Placeholders pour ne rien casser dans l'UI
+  async getTests(){ return []; }, async getTest(){ return null; },
+  async createTest(){ throw new Error("Non implémenté (Supabase)"); },
+  async updateTest(){ throw new Error("Non implémenté (Supabase)"); },
+  async deleteTest(){ throw new Error("Non implémenté (Supabase)"); },
+  async saveDiagnostic(){ throw new Error("Non implémenté (Supabase)"); },
+  async getDiagnostics(){ return []; },
+  downloadPdf(){ alert("Export PDF non implémenté."); },
 
-  static async me() {
-    return await this.request('/api/auth/me');
-  }
-
-  // Arbres décisionnels
-  static async getTrees() {
-    return await this.request('/api/trees');
-  }
-
-  static async getTree(id) {
-    return await this.request(`/api/trees/${id}`);
-  }
-
-  static async createTree(treeData) {
-    return await this.request('/api/trees', {
-      method: 'POST',
-      body: JSON.stringify(treeData)
-    });
-  }
-
-  static async updateTree(id, treeData) {
-    return await this.request(`/api/trees/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(treeData)
-    });
-  }
-
-  static async deleteTree(id) {
-    return await this.request(`/api/trees/${id}`, {
-      method: 'DELETE'
-    });
-  }
-
-  // Tests orthopédiques
-  static async getTests(region = null) {
-    const query = region ? `?region=${encodeURIComponent(region)}` : '';
-    return await this.request(`/api/tests${query}`);
-  }
-
-  static async getTest(id) {
-    return await this.request(`/api/tests/${id}`);
-  }
-
-  static async createTest(testData) {
-    return await this.request('/api/tests', {
-      method: 'POST',
-      body: JSON.stringify(testData)
-    });
-  }
-
-  static async updateTest(id, testData) {
-    return await this.request(`/api/tests/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(testData)
-    });
-  }
-
-  static async deleteTest(id) {
-    return await this.request(`/api/tests/${id}`, {
-      method: 'DELETE'
-    });
-  }
-
-  // Diagnostics
-  static async saveDiagnostic(data) {
-    return await this.request('/api/diagnostics', {
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
-  }
-
-  static async getDiagnostics() {
-    return await this.request('/api/diagnostics');
-  }
-
-  static downloadPdf(id) {
-    // Utiliser directement le port backend (3000) car le proxy ne fonctionne pas pour window.open
-    const url = `http://localhost:3000/api/diagnostics/${id}/pdf`;
-    window.open(url, '_blank');
-  }
-
-  // Utilisateurs (admin)
-  static async getUsers() {
-    return await this.request('/api/users');
-  }
-
-  static async createUser(userData) {
-    return await this.request('/api/users', {
-      method: 'POST',
-      body: JSON.stringify(userData)
-    });
-  }
-
-  static async updateUser(id, userData) {
-    return await this.request(`/api/users/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(userData)
-    });
-  }
-
-  static async updatePassword(userId, currentPassword, newPassword) {
-    return await this.request(`/api/users/${userId}/password`, {
-      method: 'PUT',
-      body: JSON.stringify({ currentPassword, newPassword })
-    });
-  }
-
-  static async deleteUser(id) {
-    return await this.request(`/api/users/${id}`, { method: 'DELETE' });
-  }
-
-  // Statistiques
-  static async getStats() {
-    return await this.request('/api/stats');
-  }
-
-  // Paramètres
-  static async getSetting(key) {
-    return await this.request(`/api/settings/${key}`);
-  }
-
-  static async setSetting(key, value) {
-    return await this.request(`/api/settings/${key}`, {
-      method: 'PUT',
-      body: JSON.stringify({ value })
-    });
-  }
-}
+  async getUsers(){
+    const { data, error } = await supabase.from("users").select("id,email,name,role");
+    if (error) throw new Error(msg(error));
+    return data || [];
+  },
+  async createUser(){ throw new Error("Créer un user se fait via 'register'"); },
+  async updateUser(id, d){
+    const { error } = await supabase.from("users").update(d).eq("id", id);
+    if (error) throw new Error(msg(error));
+  },
+  async updatePassword(){ throw new Error("Non implémenté (Supabase)"); },
+  async deleteUser(){ throw new Error("Suppression user côté client non dispo"); },
+  async getStats(){ return { users:0, trees:0 }; },
+  async getSetting(){ return null; },
+  async setSetting(){ throw new Error("Non implémenté (Supabase)"); }
+};
 
 export default API;
