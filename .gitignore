@@ -20,3 +20,6 @@ build/
 *.db
 *.db-shm
 *.db-wal
+# Local backups
+*.backup.js
+*.backup.html
