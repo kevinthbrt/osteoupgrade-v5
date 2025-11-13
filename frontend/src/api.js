@@ -3,12 +3,31 @@ const msg = (e, f="Erreur") => e?.message || e?.error_description || f;
 
 const API = {
   async login(email, password) {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw new Error(msg(error, "Échec de connexion"));
-    const u = data.user;
-    await supabase.from("users").upsert({ id: u.id, email: u.email }, { onConflict: "id" });
-    return { id: u.id, email: u.email, name: u.user_metadata?.name || u.email, status: "user" };
-  },
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) throw new Error(msg(error, "Échec de connexion"));
+
+  const u = data.user;
+
+  // on s'assure que la ligne existe
+  await supabase
+    .from("users")
+    .upsert({ id: u.id, email: u.email }, { onConflict: "id" });
+
+  // on lit le vrai role / nom depuis la table users
+  const { data: row } = await supabase
+    .from("users")
+    .select("name, role")
+    .eq("id", u.id)
+    .single();
+
+  return {
+    id: u.id,
+    email: u.email,
+    name: row?.name || u.user_metadata?.name || u.email,
+    status: row?.role || "user",
+  };
+},
+
   async register(email, password, name) {
     const { data, error } = await supabase.auth.signUp({
       email,
