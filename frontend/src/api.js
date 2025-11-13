@@ -70,22 +70,23 @@ const API = {
     if (error) throw new Error(errMsg(error, "Échec de déconnexion"));
   },
 
-  async me() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error("Pas de session");
-    const { data: row, error } = await supabase
-      .from("users")
-      .select("email,name,role")
-      .eq("id", user.id)
-      .single();
-    if (error && error.code !== "PGRST116") throw error; // ignore not found
-    return {
-      id: user.id,
-      email: row?.email || user.email,
-      name: row?.name || user.user_metadata?.name || user.email,
-      status: row?.role || "user",
-    };
-  },
+  // me(): récupère le profil et le rôle via RPC (évite la policy récursive)
+async me() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Pas de session");
+
+  // Récupère ton profil dans public.users via la RPC sécurisée
+  const { data: meRow, error: meErr } = await supabase.rpc('get_my_profile').single();
+  if (meErr) {
+    console.warn('get_my_profile error:', meErr.message);
+  }
+
+  // Fallback si la RPC ne renvoie rien (ex. première connexion avant upsert)
+  const name = meRow?.name || user.user_metadata?.name || user.email;
+  const role = meRow?.role || 'freemium';
+
+  return { id: user.id, email: user.email, name, status: role };
+},
 
   // -------------------- TREES --------------------
   async getTrees() {
